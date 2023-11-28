@@ -13,5 +13,6 @@ I'm a passionate coder interested in Python and collaborating on exciting coding
 ## 📫 How to Reach Me
 
 - Email: haarishss2018@gmail.com
+- [Linkedin](https://www.linkedin.com/public-profile/settings?trk=d_flagship3_profile_self_view_public_profile) 
 
 Let's connect, learn, and create together!
