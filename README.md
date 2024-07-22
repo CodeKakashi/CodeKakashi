@@ -1,6 +1,6 @@
 # 👋 Hi, I’m CodeKakashi
 
-I'm a passionate coder interested in Python and collaborating on exciting coding projects.
+I'm a passionate coder interested in exploring new things.
 
 ## 🌱 Currently Learning
 
