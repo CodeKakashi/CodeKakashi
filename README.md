@@ -16,3 +16,12 @@ I'm a passionate coder interested in exploring new things.
 - **LinkedIn:** [LinkedIn Profile](www.linkedin.com/in/haarish-s-251b78224)
 
 Let's connect, learn, and create together!
+
+
+---
+[![](https://visitcount.itsvg.in/api?id=anuja-rahul&icon=0&color=0)](https://visitcount.itsvg.in)
+
+<p>
+<img src="https://github.com/anuja-rahul/anuja-rahul/blob/output/github-contribution-grid-snake-dark.svg" 
+alt="snake animation svg">
+</p>
