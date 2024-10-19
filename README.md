@@ -20,8 +20,7 @@ Let's connect, learn, and create together!
 
 ---
 [![](https://visitcount.itsvg.in/api?id=anuja-rahul&icon=0&color=0)](https://visitcount.itsvg.in)
+### Watch my contribution graph get eaten by the snake :snake:
 
-<p>
-<img src="https://github.com/anuja-rahul/anuja-rahul/blob/output/github-contribution-grid-snake-dark.svg" 
-alt="snake animation svg">
-</p>
+<!-- platane/snk works, it just puts it on a new branch -->
+![mishmanners snake gif](https://github.com/Codekakashi/Codekakashi/output/github-contribution-grid-snake.gif)
