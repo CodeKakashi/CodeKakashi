@@ -23,4 +23,4 @@ Let's connect, learn, and create together!
 ### Watch my contribution graph get eaten by the snake :snake:
 
 <!-- platane/snk works, it just puts it on a new branch -->
-![mishmanners snake gif](https://github.com/Codekakashi/Codekakashi/output/github-contribution-grid-snake.gif)
+![mishmanners snake gif](https://github.com/Codekakashi/Codekakashi/output/github-contribution-grid-snake.svg)
