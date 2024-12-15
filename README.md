@@ -1,3 +1,7 @@
+---
+[![](https://visitcount.itsvg.in/api?id=anuja-rahul&icon=0&color=0)](https://visitcount.itsvg.in)
+
+
 # 👋 Hi, I’m CodeKakashi
 
 I'm a passionate coder interested in exploring new things.
@@ -23,13 +27,11 @@ I'm a passionate coder interested in exploring new things.
 Let's connect, learn, and create together!
 
 
----
-[![](https://visitcount.itsvg.in/api?id=anuja-rahul&icon=0&color=0)](https://visitcount.itsvg.in)
-### Watch my contribution graph get eaten by the snake :snake:
 
 
 <!-- Snake -->
 <!--<div align="center">
+### Watch my contribution graph get eaten by the snake :snake:
     
   ![snake gif](https://github.com/Codekakashi/Codekakashi/blob/output/github-snake-dark.svg)
 </div> -->
