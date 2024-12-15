@@ -25,10 +25,6 @@ I'm a passionate coder interested in exploring new things.
 - Exciting coding projects that push the boundaries of technology.
 
 ## 📫 How to Reach Me
-
-- **Email:** [haarishss2018@gmail.com](mailto:haarishss2018@gmail.com)
-- **LinkedIn:** [LinkedIn Profile](www.linkedin.com/in/haarish-s-251b78224)
-
 <!-- Socials -->
 <div align="left">
 
