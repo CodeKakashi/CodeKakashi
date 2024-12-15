@@ -27,7 +27,7 @@ I'm a passionate coder interested in exploring new things.
 <!-- Socials -->
 <div align="center">
   
- [![Instagram](https://img.shields.io/badge/Instagram-%23E4405F.svg?logo=Instagram&logoColor=white)](https://instagram.com/mark.me.absent_) [![LinkedIn](https://img.shields.io/badge/LinkedIn-%230077B5.svg?logo=linkedin&logoColor=white)](www.linkedin.com/in/haarish-s-251b78224) [![X](https://img.shields.io/badge/X-black.svg?logo=X&logoColor=white)](https://x.com/haarish) [![whatsapp](https://img.shields.io/badge/wiki/File:WhatsApp.svg)](https://wa.me/+916383845870)
+ [![Instagram](https://img.shields.io/badge/Instagram-%23E4405F.svg?logo=Instagram&logoColor=white)](https://instagram.com/mark.me.absent_) [![LinkedIn](https://img.shields.io/badge/LinkedIn-%230077B5.svg?logo=linkedin&logoColor=white)](www.linkedin.com/in/haarish-s-251b78224) [![X](https://img.shields.io/badge/X-black.svg?logo=X&logoColor=white)](https://x.com/haarish) [![whatsapp](https://img.shields.io/badge/whatsapp)](https://wa.me/+916383845870)
 
 
 </div>
