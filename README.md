@@ -3,7 +3,7 @@
 
 
 # 👋 Hi, I’m CodeKakashi
-![Portfolio](https://img.shields.io/badge/Portfolio-%23000000.svg?style=for-the-badge&logo=vercel&logoColor=white)
+[![Portfolio](https://img.shields.io/badge/Portfolio-%23000000.svg?style=for-the-badge&logo=vercel&logoColor=white)](https://haarish-porfolio.vercel.app)
 
 I'm a passionate coder interested in exploring new things.
 
@@ -32,8 +32,7 @@ I'm a passionate coder interested in exploring new things.
 <!-- Socials -->
 <div align="left">
 
-[![Instagram](https://img.shields.io/badge/Instagram-%23E4405F.svg?logo=Instagram&logoColor=white)](https://instagram.com/mark.me.absent_) [![LinkedIn](https://img.shields.io/badge/LinkedIn-%230077B5.svg?logo=linkedin&logoColor=white)](www.linkedin.com/in/haarish-s-251b78224) [![X](https://img.shields.io/badge/X-black.svg?logo=X&logoColor=white)](https://x.com/haarish) ![WhatsApp](https://img.shields.io/badge/WhatsApp-%2325D366.svg?style=for-the-badge&logo=whatsapp&logoColor=white)
-[![Email Me](https://img.shields.io/badge/Email%20Me-D14836?style=for-the-badge&logo=gmail&logoColor=white)](mailto:haarishss2018@gmail.com?subject=Collaboration%20Opportunity&body=Hi,%20I%20hope%20this%20email%20finds%20you%20well.%20I%20am%20reaching%20out%20to%20express%20my%20interest%20in%20collaborating%20with%20you.%20[Add%20specific%20details%20about%20the%20collaboration%20or%20project%20here%20if%20applicable.]%20Looking%20forward%20to%20your%20response.%20Best%20regards,%20[Your%20Name].)
+[![Instagram](https://img.shields.io/badge/Instagram-%23E4405F.svg?logo=Instagram&logoColor=white)](https://instagram.com/mark.me.absent_) [![LinkedIn](https://img.shields.io/badge/LinkedIn-%230077B5.svg?logo=linkedin&logoColor=white)](www.linkedin.com/in/haarish-s-251b78224) [![X](https://img.shields.io/badge/X-black.svg?logo=X&logoColor=white)](https://x.com/haarish) [![WhatsApp](https://img.shields.io/badge/WhatsApp-%2325D366.svg?style=for-the-badge&logo=whatsapp&logoColor=white)](https://wa.me/6383845870)[![Email Me](https://img.shields.io/badge/Email%20Me-D14836?style=for-the-badge&logo=gmail&logoColor=white)](mailto:haarishss2018@gmail.com)
 
 
 </div>
