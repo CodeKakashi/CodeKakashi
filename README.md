@@ -3,8 +3,10 @@
 
 
 # 👋 Hi, I’m CodeKakashi
+[![Site](https://img.shields.io/badge/View%20My%20On%20Site-8A2BE2%20)](https://haarish-porfolio.vercel.app)
 
 I'm a passionate coder interested in exploring new things.
+
 
 
 <!-- Tech Stack -->
