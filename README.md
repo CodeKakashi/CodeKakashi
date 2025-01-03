@@ -3,7 +3,7 @@
 
 
 # 👋 Hi, I’m CodeKakashi
-[![Portfolio](https://img.shields.io/badge/Portfolio-%23000000.svg?style=for-the-badge&logo=vercel&logoColor=white)](https://haarish-porfolio.vercel.app)
+[![Visit my website](https://img.shields.io/badge/Visit%20my%20website-%23000000.svg?style=for-the-badge&logo=vercel&logoColor=white)](https://haarish-porfolio.vercel.app)
 
 I'm a passionate coder interested in exploring new things.
 
