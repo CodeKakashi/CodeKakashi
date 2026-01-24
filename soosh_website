@@ -1,0 +1,672 @@
+<!-- Chosen Palette: Calm Focus (Warm Cream #FDFBF7, Soft Slate #475569, Accessible Teal #0D9488, Alert Amber #D97706) -->
+<!-- Application Structure Plan: The app uses a "Dashboard Specification" structure. It is divided into four primary tabs corresponding to the four research areas. This structure reduces cognitive load for the reader (modeling the very principles discussed) by compartmentalizing complex technical requirements into digestible modules.
+     1. UX/UI Standards: Interactive cards explaining WCAG/COGA criteria with a 'Simulate Focus Mode' toggle to demonstrate the concept.
+     2. AI Interaction: A Split-View showing 'Standard' vs. 'Accessible' LLM outputs to illustrate prompt engineering requirements.
+     3. Safety Metrics: A mock analytics dashboard using Chart.js to visualize how behavioral metrics (rage clicks, latency) can be tracked.
+     4. Competitive Analysis: A feature comparison matrix using filtered cards.
+     The layout prioritizes readability, clear headings, and 'contextual' sidebars that explain the 'Why' behind the 'What'. -->
+<!-- Visualization & Content Choices:
+     - UX/UI Section: Grid of "Criterion Cards". Interaction: Click to expand technical implementation details. Goal: Inform developers of specific WCAG 2.2 points.
+     - AI Section: Text comparison interface. Goal: Demonstrate the difference in reading age/tone.
+     - Metrics Section: Chart.js Line Chart (latency tracking) and Bar Chart (error rates). Goal: Visualize abstract behavioral concepts. Interaction: Update data buttons.
+     - Competitor Section: Comparison Grid. Goal: Benchmark features.
+     - Justification: Charts are used only where quantitative data concepts (metrics) are discussed. Text/Layout is used for qualitative standards. Unicode icons replace SVGs. -->
+<!-- CONFIRMATION: NO SVG graphics used. NO Mermaid JS used. -->
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Soosh: Accessibility Technical Specification</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+    <style>
+        @import url('https://fonts.googleapis.com/css2?family=Inter:wght@300;400;600;700&family=Atkinson+Hyperlegible:wght@400;700&display=swap');
+
+        :root {
+            --bg-color: #FDFBF7;
+            --text-main: #334155;
+            --primary: #0D9488;
+            --secondary: #E2E8F0;
+            --accent: #F59E0B;
+        }
+
+        body {
+            background-color: var(--bg-color);
+            color: var(--text-main);
+            font-family: 'Inter', sans-serif;
+            transition: all 0.3s ease;
+        }
+
+        /* Accessible Font Toggle Class */
+        body.accessible-mode {
+            font-family: 'Atkinson Hyperlegible', sans-serif;
+            line-height: 1.8;
+            letter-spacing: 0.02em;
+        }
+        
+        body.accessible-mode .decoration-element {
+            display: none !important;
+        }
+
+        .chart-container {
+            position: relative; 
+            width: 100%; 
+            max-width: 600px; 
+            margin-left: auto; 
+            margin-right: auto; 
+            height: 300px; 
+            max-height: 400px; 
+        }
+
+        @media (min-width: 768px) {
+            .chart-container {
+                height: 350px; 
+            }
+        }
+
+        .tab-btn.active {
+            border-bottom: 3px solid var(--primary);
+            color: var(--primary);
+            font-weight: 700;
+        }
+
+        .card-hover:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.1), 0 2px 4px -1px rgba(0, 0, 0, 0.06);
+        }
+
+        /* Focus styles for accessibility */
+        button:focus-visible {
+            outline: 3px solid var(--accent);
+            outline-offset: 2px;
+        }
+    </style>
+</head>
+<body class="min-h-screen flex flex-col">
+
+    <!-- Header / Navigation -->
+    <header class="bg-white border-b border-slate-200 sticky top-0 z-50 shadow-sm">
+        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+            <div class="flex justify-between items-center h-16">
+                <div class="flex items-center gap-2">
+                    <span class="text-3xl">🧠</span>
+                    <h1 class="text-xl font-bold text-slate-800">Soosh <span class="text-teal-600 font-normal">| Tech Spec</span></h1>
+                </div>
+                <button id="access-toggle" class="flex items-center gap-2 px-4 py-2 rounded-lg bg-slate-100 hover:bg-slate-200 text-sm font-medium transition-colors" aria-pressed="false">
+                    <span>👁️</span> 
+                    <span id="access-text">Enable Focus Mode</span>
+                </button>
+            </div>
+            
+            <!-- Tab Navigation -->
+            <nav class="flex space-x-8 overflow-x-auto pb-1 mt-2 no-scrollbar" aria-label="Main Navigation">
+                <button class="tab-btn active px-1 py-4 text-sm font-medium text-slate-500 whitespace-nowrap hover:text-teal-600" data-tab="dashboard">Executive Summary</button>
+                <button class="tab-btn px-1 py-4 text-sm font-medium text-slate-500 whitespace-nowrap hover:text-teal-600" data-tab="uxui">1. UX & UI Standards</button>
+                <button class="tab-btn px-1 py-4 text-sm font-medium text-slate-500 whitespace-nowrap hover:text-teal-600" data-tab="ai">2. AI & LLM Design</button>
+                <button class="tab-btn px-1 py-4 text-sm font-medium text-slate-500 whitespace-nowrap hover:text-teal-600" data-tab="metrics">3. Metrics & Safety</button>
+                <button class="tab-btn px-1 py-4 text-sm font-medium text-slate-500 whitespace-nowrap hover:text-teal-600" data-tab="competitors">4. Competitive Analysis</button>
+            </nav>
+        </div>
+    </header>
+
+    <!-- Main Content Area -->
+    <main class="flex-grow max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-8 w-full">
+
+        <!-- TAB 0: EXECUTIVE SUMMARY -->
+        <section id="dashboard" class="tab-content block space-y-8 animate-fade-in">
+            <div class="bg-teal-50 border border-teal-100 rounded-2xl p-6 sm:p-10 decoration-element">
+                <h2 class="text-2xl font-bold text-teal-900 mb-4">Project: Neurodiverse-First Employment Platform</h2>
+                <p class="text-lg text-teal-800 leading-relaxed max-w-3xl">
+                    This technical specification defines the engineering requirements for "Soosh". 
+                    Our goal is to build a platform that is not just compliant, but effectively usable for individuals with learning disabilities (LD), reduced working memory, and anxiety.
+                </p>
+                <div class="mt-6 flex flex-wrap gap-4">
+                    <div class="bg-white px-4 py-2 rounded-lg shadow-sm text-sm font-medium text-teal-700">🎯 Target Reading Age: 9-10 Years</div>
+                    <div class="bg-white px-4 py-2 rounded-lg shadow-sm text-sm font-medium text-teal-700">🛡️ Safety Standard: NHS/Gov.uk</div>
+                    <div class="bg-white px-4 py-2 rounded-lg shadow-sm text-sm font-medium text-teal-700">⚖️ Compliance: WCAG 2.2 AA+</div>
+                </div>
+            </div>
+
+            <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6">
+                <!-- Summary Cards -->
+                <div class="bg-white p-6 rounded-xl shadow-sm border border-slate-100 hover:border-teal-200 transition-colors cursor-pointer" onclick="switchTab('uxui')">
+                    <div class="text-3xl mb-3">🎨</div>
+                    <h3 class="font-bold text-slate-800 mb-2">Cognitive UI</h3>
+                    <p class="text-sm text-slate-600">Linear flows and distraction-free interfaces to reduce cognitive load.</p>
+                </div>
+                <div class="bg-white p-6 rounded-xl shadow-sm border border-slate-100 hover:border-teal-200 transition-colors cursor-pointer" onclick="switchTab('ai')">
+                    <div class="text-3xl mb-3">🤖</div>
+                    <h3 class="font-bold text-slate-800 mb-2">Trauma-Informed AI</h3>
+                    <p class="text-sm text-slate-600">LLM parameters for Plain Language and anxiety reduction.</p>
+                </div>
+                <div class="bg-white p-6 rounded-xl shadow-sm border border-slate-100 hover:border-teal-200 transition-colors cursor-pointer" onclick="switchTab('metrics')">
+                    <div class="text-3xl mb-3">📊</div>
+                    <h3 class="font-bold text-slate-800 mb-2">Safety Metrics</h3>
+                    <p class="text-sm text-slate-600">Detecting "rage clicks" and cognitive struggle patterns.</p>
+                </div>
+                <div class="bg-white p-6 rounded-xl shadow-sm border border-slate-100 hover:border-teal-200 transition-colors cursor-pointer" onclick="switchTab('competitors')">
+                    <div class="text-3xl mb-3">🏢</div>
+                    <h3 class="font-bold text-slate-800 mb-2">Market Analysis</h3>
+                    <p class="text-sm text-slate-600">Insights from Brain in Hand and Auticon.</p>
+                </div>
+            </div>
+        </section>
+
+        <!-- TAB 1: UX & UI STANDARDS -->
+        <section id="uxui" class="tab-content hidden space-y-8">
+            <div class="border-l-4 border-teal-500 pl-4">
+                <h2 class="text-2xl font-bold text-slate-900">1. UX & UI Standards for Cognitive Disability</h2>
+                <p class="mt-2 text-slate-600">Core engineering requirements derived from WCAG 2.2 and W3C COGA to minimize cognitive load and prevent errors.</p>
+            </div>
+
+            <!-- Focus & Load Section -->
+            <div class="bg-white rounded-2xl shadow-sm border border-slate-200 overflow-hidden">
+                <div class="p-6 border-b border-slate-100 bg-slate-50 flex justify-between items-center">
+                    <h3 class="font-bold text-lg text-slate-800">Critical Success Criteria (WCAG 2.2 / COGA)</h3>
+                    <span class="text-xs font-mono bg-slate-200 px-2 py-1 rounded">Dev Requirements</span>
+                </div>
+                <div class="p-6 grid gap-6 md:grid-cols-2">
+                    
+                    <!-- Criteria 1 -->
+                    <div class="p-4 border border-slate-200 rounded-lg bg-slate-50">
+                        <div class="flex items-start gap-3">
+                            <span class="text-2xl mt-1">🎯</span>
+                            <div>
+                                <h4 class="font-bold text-slate-800">Focus & Persistence</h4>
+                                <p class="text-xs font-mono text-teal-600 mb-2">WCAG 2.4.7, 2.4.11</p>
+                                <p class="text-sm text-slate-600 mb-3">Users with reduced working memory may lose their place. Interface elements must not disappear automatically.</p>
+                                <ul class="text-sm text-slate-700 list-disc list-inside bg-white p-3 rounded border border-slate-100">
+                                    <li>Focus indicators must have <strong>3:1 contrast</strong>.</li>
+                                    <li>Tooltips must be <strong>persistent</strong> (dismissible by Escape key only).</li>
+                                    <li>No time-outs on reading content.</li>
+                                </ul>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Criteria 2 -->
+                    <div class="p-4 border border-slate-200 rounded-lg bg-slate-50">
+                        <div class="flex items-start gap-3">
+                            <span class="text-2xl mt-1">🛑</span>
+                            <div>
+                                <h4 class="font-bold text-slate-800">Error Prevention</h4>
+                                <p class="text-xs font-mono text-teal-600 mb-2">WCAG 3.3.4, 3.3.8</p>
+                                <p class="text-sm text-slate-600 mb-3">Anxiety increases error rates. Reversible actions are critical.</p>
+                                <ul class="text-sm text-slate-700 list-disc list-inside bg-white p-3 rounded border border-slate-100">
+                                    <li>Implement <strong>"Accessible Authentication"</strong> (no memory tests/puzzles).</li>
+                                    <li>All form submissions require a <strong>Confirmation Step</strong>.</li>
+                                    <li>Input fields must support <strong>autocomplete</strong> to reduce typing.</li>
+                                </ul>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Design Pattern Demo -->
+            <div class="bg-white rounded-2xl shadow-sm border border-slate-200 p-6">
+                <h3 class="font-bold text-lg text-slate-800 mb-4">Design Pattern: Linear Navigation</h3>
+                <p class="text-sm text-slate-600 mb-6">Users with attention deficits struggle with "Dashboard" layouts that have multiple competing calls to action. The UI must be strictly linear.</p>
+
+                <div class="grid grid-cols-1 lg:grid-cols-2 gap-8">
+                    <!-- Bad Example -->
+                    <div class="border-2 border-red-100 rounded-xl p-4 opacity-75 decoration-element">
+                        <div class="text-xs font-bold text-red-500 uppercase mb-2">❌ High Cognitive Load (Avoid)</div>
+                        <div class="h-32 bg-slate-100 rounded grid grid-cols-3 gap-2 p-2">
+                            <div class="col-span-3 bg-white h-6 rounded"></div>
+                            <div class="bg-blue-100 h-20 rounded"></div>
+                            <div class="bg-green-100 h-20 rounded"></div>
+                            <div class="bg-yellow-100 h-20 rounded"></div>
+                        </div>
+                        <p class="text-xs text-slate-500 mt-2">Multiple columns, sidebars, and competing attention grabbers overwhelm the user.</p>
+                    </div>
+
+                    <!-- Good Example -->
+                    <div class="border-2 border-teal-100 rounded-xl p-4 bg-teal-50/30">
+                        <div class="text-xs font-bold text-teal-600 uppercase mb-2">✅ Linear Flow (Recommended)</div>
+                        <div class="h-32 bg-white rounded border border-slate-100 flex flex-col items-center justify-center gap-3 p-4">
+                            <div class="w-3/4 h-4 bg-slate-200 rounded"></div>
+                            <div class="w-1/2 h-8 bg-teal-500 rounded text-white text-xs flex items-center justify-center">One Action</div>
+                        </div>
+                        <p class="text-xs text-slate-500 mt-2">Single column, one primary action per screen, distinct "Back" and "Next" buttons.</p>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- TAB 2: AI & LLM DESIGN -->
+        <section id="ai" class="tab-content hidden space-y-8">
+            <div class="border-l-4 border-teal-500 pl-4">
+                <h2 class="text-2xl font-bold text-slate-900">2. AI & LLM Interaction Design</h2>
+                <p class="mt-2 text-slate-600">Guidelines for System Prompts and Conversational Interfaces to support UK Primary School reading levels (Age 9-10) and Trauma-Informed interactions.</p>
+            </div>
+
+            <!-- System Prompt Configuration -->
+            <div class="bg-white rounded-2xl shadow-sm border border-slate-200 p-6">
+                <div class="flex flex-col md:flex-row gap-8">
+                    
+                    <!-- Controls -->
+                    <div class="w-full md:w-1/3 space-y-6">
+                        <h3 class="font-bold text-slate-800">System Prompt Parameters</h3>
+                        
+                        <div class="space-y-2">
+                            <label class="text-sm font-medium text-slate-700">Reading Level Target</label>
+                            <select id="readingLevel" class="w-full p-2 border border-slate-300 rounded-lg bg-slate-50 text-sm focus:ring-2 focus:ring-teal-500">
+                                <option value="complex">Standard (Adult/Corporate)</option>
+                                <option value="accessible" selected>Accessible (UK Year 5 / Age 9-10)</option>
+                            </select>
+                        </div>
+
+                        <div class="space-y-2">
+                            <label class="text-sm font-medium text-slate-700">Error Handling Style</label>
+                            <div class="flex gap-2">
+                                <button onclick="setPromptStyle('blunt')" class="flex-1 py-2 text-xs border border-slate-300 rounded hover:bg-slate-50">Standard</button>
+                                <button onclick="setPromptStyle('trauma')" class="flex-1 py-2 text-xs bg-teal-100 border border-teal-200 text-teal-800 rounded font-bold">Trauma-Informed</button>
+                            </div>
+                        </div>
+
+                        <div class="p-4 bg-slate-50 rounded-lg border border-slate-200">
+                            <h4 class="text-xs font-bold text-slate-500 uppercase mb-2">Required Tech Specs</h4>
+                            <ul class="text-xs space-y-2 text-slate-600">
+                                <li>• Temperature: 0.2 (Reduce hallucinations)</li>
+                                <li>• Max Sentence Length: 15 words</li>
+                                <li>• Active Voice ONLY</li>
+                                <li>• No idioms or metaphors</li>
+                            </ul>
+                        </div>
+                    </div>
+
+                    <!-- Simulator -->
+                    <div class="w-full md:w-2/3 bg-slate-50 rounded-xl border border-slate-200 p-4 flex flex-col h-80">
+                        <div class="flex items-center gap-2 border-b border-slate-200 pb-3 mb-3">
+                            <span class="text-xl">🤖</span>
+                            <span class="text-sm font-bold text-slate-700">Soosh Assistant Simulator</span>
+                        </div>
+                        
+                        <!-- Chat Area -->
+                        <div id="chat-display" class="flex-grow overflow-y-auto space-y-4 pr-2">
+                            <!-- User Message -->
+                            <div class="flex justify-end">
+                                <div class="bg-slate-200 text-slate-800 px-4 py-2 rounded-t-lg rounded-bl-lg max-w-[80%] text-sm">
+                                    I tried to upload my CV but it didn't work. I feel stupid.
+                                </div>
+                            </div>
+
+                            <!-- Bot Response (Dynamic) -->
+                            <div class="flex justify-start">
+                                <div id="bot-message" class="bg-white border border-teal-100 text-slate-800 px-4 py-3 rounded-t-lg rounded-br-lg max-w-[90%] text-sm shadow-sm">
+                                    <!-- Content injected via JS -->
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Trauma Informed Principles -->
+            <div class="grid grid-cols-1 md:grid-cols-3 gap-6">
+                <div class="bg-white p-5 rounded-xl border border-slate-200">
+                    <div class="text-2xl mb-2">🛡️</div>
+                    <h4 class="font-bold text-slate-800">Safety First</h4>
+                    <p class="text-sm text-slate-600 mt-2">Never blame the user. Avoid phrases like "You made an error." Use "We couldn't read that file."</p>
+                </div>
+                <div class="bg-white p-5 rounded-xl border border-slate-200">
+                    <div class="text-2xl mb-2">🌱</div>
+                    <h4 class="font-bold text-slate-800">Choice & Control</h4>
+                    <p class="text-sm text-slate-600 mt-2">Always offer a "Start Over" button and a clear way to exit the conversation.</p>
+                </div>
+                <div class="bg-white p-5 rounded-xl border border-slate-200">
+                    <div class="text-2xl mb-2">🤝</div>
+                    <h4 class="font-bold text-slate-800">Validation</h4>
+                    <p class="text-sm text-slate-600 mt-2">Acknowledge frustration before offering a technical solution. This lowers cortisol/anxiety.</p>
+                </div>
+            </div>
+        </section>
+
+        <!-- TAB 3: METRICS & SAFEGUARDING -->
+        <section id="metrics" class="tab-content hidden space-y-8">
+            <div class="border-l-4 border-teal-500 pl-4">
+                <h2 class="text-2xl font-bold text-slate-900">3. Behavioral Metrics & Safeguarding</h2>
+                <p class="mt-2 text-slate-600">Defining "Digital Markers of Struggle" to trigger automated support interventions, aligned with NHS Digital Service Manual standards.</p>
+            </div>
+
+            <div class="grid grid-cols-1 lg:grid-cols-2 gap-8">
+                <!-- Rage Click Analysis -->
+                <div class="bg-white rounded-2xl shadow-sm border border-slate-200 p-6">
+                    <div class="flex justify-between items-center mb-4">
+                        <h3 class="font-bold text-slate-800">Marker 1: Rage Clicks & Rapid Movement</h3>
+                        <button onclick="updateChartData()" class="text-xs text-teal-600 font-bold hover:underline">Simulate Incident</button>
+                    </div>
+                    <p class="text-sm text-slate-500 mb-4">Detection of frustration: >3 clicks on same element in 2 seconds.</p>
+                    
+                    <div class="chart-container">
+                        <canvas id="rageClickChart"></canvas>
+                    </div>
+                </div>
+
+                <!-- Latency Analysis -->
+                <div class="bg-white rounded-2xl shadow-sm border border-slate-200 p-6">
+                    <h3 class="font-bold text-slate-800 mb-2">Marker 2: Cognitive Overload (Latency)</h3>
+                    <p class="text-sm text-slate-500 mb-4">Long pauses (>45s) on simple tasks indicate executive dysfunction freeze response.</p>
+                    
+                    <div class="chart-container">
+                        <canvas id="latencyChart"></canvas>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Safeguarding Protocol Table -->
+            <div class="bg-white rounded-xl border border-slate-200 overflow-hidden">
+                <div class="p-4 bg-slate-50 border-b border-slate-200">
+                    <h3 class="font-bold text-slate-800">Safeguarding Response Protocol</h3>
+                </div>
+                <div class="overflow-x-auto">
+                    <table class="w-full text-sm text-left">
+                        <thead class="bg-slate-50 text-slate-500">
+                            <tr>
+                                <th class="px-6 py-3 font-medium">Trigger Event</th>
+                                <th class="px-6 py-3 font-medium">System Diagnosis</th>
+                                <th class="px-6 py-3 font-medium text-teal-700">Automated Intervention</th>
+                            </tr>
+                        </thead>
+                        <tbody class="divide-y divide-slate-100">
+                            <tr>
+                                <td class="px-6 py-4">3+ Failed Form Submissions</td>
+                                <td class="px-6 py-4">Looping / Perseverance Failure</td>
+                                <td class="px-6 py-4 bg-teal-50/50"><strong>Pause & Redirect:</strong> "It looks like this form is tricky. Would you like to skip it for now?"</td>
+                            </tr>
+                            <tr>
+                                <td class="px-6 py-4">High Velocity Cursor Shaking</td>
+                                <td class="px-6 py-4">Anxiety / Confusion</td>
+                                <td class="px-6 py-4 bg-teal-50/50"><strong>Simplify UI:</strong> Automatically hide non-essential elements.</td>
+                            </tr>
+                            <tr>
+                                <td class="px-6 py-4">Abusive Language in Chat</td>
+                                <td class="px-6 py-4">Meltdown / Distress</td>
+                                <td class="px-6 py-4 bg-teal-50/50"><strong>De-escalation Mode:</strong> Switch to rule-based responses. Offer human support contact.</td>
+                            </tr>
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+        </section>
+
+        <!-- TAB 4: COMPETITOR ANALYSIS -->
+        <section id="competitors" class="tab-content hidden space-y-8">
+            <div class="border-l-4 border-teal-500 pl-4">
+                <h2 class="text-2xl font-bold text-slate-900">4. Competitor & Case Study Analysis</h2>
+                <p class="mt-2 text-slate-600">Key learnings from market leaders "Brain in Hand" and "Auticon" regarding employment support features.</p>
+            </div>
+
+            <!-- Comparison Cards -->
+            <div class="grid grid-cols-1 md:grid-cols-2 gap-8">
+                
+                <!-- Competitor 1 -->
+                <div class="bg-white rounded-2xl shadow-lg border-t-4 border-indigo-500 p-6 flex flex-col h-full">
+                    <div class="mb-4">
+                        <h3 class="text-xl font-bold text-slate-800">Brain in Hand</h3>
+                        <span class="text-xs bg-indigo-100 text-indigo-700 px-2 py-1 rounded">Self-Management App</span>
+                    </div>
+                    
+                    <div class="space-y-4 flex-grow">
+                        <div>
+                            <h4 class="text-sm font-bold text-slate-700 mb-1">Key Feature: Traffic Light System</h4>
+                            <p class="text-sm text-slate-600">Uses Red/Amber/Green buttons for users to quickly signal their anxiety level without needing language. Instant triage.</p>
+                        </div>
+                        <div>
+                            <h4 class="text-sm font-bold text-slate-700 mb-1">Soosh Takeaway</h4>
+                            <div class="bg-indigo-50 p-3 rounded text-sm text-indigo-900">
+                                Implement a non-verbal "Panic Button" in the navbar that immediately simplifies the interface and offers help options.
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Competitor 2 -->
+                <div class="bg-white rounded-2xl shadow-lg border-t-4 border-blue-500 p-6 flex flex-col h-full">
+                    <div class="mb-4">
+                        <h3 class="text-xl font-bold text-slate-800">Auticon</h3>
+                        <span class="text-xs bg-blue-100 text-blue-700 px-2 py-1 rounded">Employment Agency</span>
+                    </div>
+                    
+                    <div class="space-y-4 flex-grow">
+                        <div>
+                            <h4 class="text-sm font-bold text-slate-700 mb-1">Key Feature: Job Mapping</h4>
+                            <p class="text-sm text-slate-600">Matches candidates not just on skills, but on sensory environment preferences (lighting, noise levels) and communication style.</p>
+                        </div>
+                        <div>
+                            <h4 class="text-sm font-bold text-slate-700 mb-1">Soosh Takeaway</h4>
+                            <div class="bg-blue-50 p-3 rounded text-sm text-blue-900">
+                                The Onboarding AI must ask about <strong>environmental needs</strong> (e.g., "Do you prefer quiet spaces?") alongside professional skills.
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Feature Matrix -->
+            <div class="bg-white rounded-xl border border-slate-200 p-6">
+                <h3 class="font-bold text-slate-800 mb-4">Feature Gap Analysis</h3>
+                <div class="grid grid-cols-4 gap-4 text-sm">
+                    <div class="font-bold text-slate-500">Feature</div>
+                    <div class="font-bold text-center text-indigo-600">Brain in Hand</div>
+                    <div class="font-bold text-center text-blue-600">Auticon</div>
+                    <div class="font-bold text-center text-teal-600">Soosh (Target)</div>
+
+                    <div class="col-span-4 h-px bg-slate-100"></div>
+
+                    <div class="text-slate-700">Human Support Link</div>
+                    <div class="text-center">✅</div>
+                    <div class="text-center">✅</div>
+                    <div class="text-center">✅</div>
+
+                    <div class="text-slate-700">AI Career Matching</div>
+                    <div class="text-center text-slate-300">❌</div>
+                    <div class="text-center">Human-led</div>
+                    <div class="text-center bg-teal-100 rounded">✅ Core USP</div>
+
+                    <div class="text-slate-700">Sensory Profiling</div>
+                    <div class="text-center">Partial</div>
+                    <div class="text-center">✅</div>
+                    <div class="text-center">✅</div>
+                </div>
+            </div>
+        </section>
+
+    </main>
+
+    <!-- Footer -->
+    <footer class="bg-slate-800 text-slate-300 py-8 mt-8">
+        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 text-center text-sm">
+            <p>Soosh Accessibility Technical Specification v1.0</p>
+            <p class="mt-2 text-slate-500">Prepared for Engineering Team | Confidential</p>
+        </div>
+    </footer>
+
+    <!-- Script Logic -->
+    <script>
+        // --- Tab Navigation Logic ---
+        function switchTab(tabId) {
+            // Hide all tabs
+            document.querySelectorAll('.tab-content').forEach(el => {
+                el.classList.add('hidden');
+                el.classList.remove('block');
+            });
+            
+            // Show selected tab
+            const target = document.getElementById(tabId);
+            if(target) {
+                target.classList.remove('hidden');
+                target.classList.add('block');
+            }
+
+            // Update nav buttons
+            document.querySelectorAll('.tab-btn').forEach(btn => {
+                btn.classList.remove('active', 'border-b-3', 'border-teal-600', 'text-teal-600');
+                if(btn.dataset.tab === tabId) {
+                    btn.classList.add('active');
+                }
+            });
+        }
+
+        // Event Listeners for tabs
+        document.querySelectorAll('.tab-btn').forEach(btn => {
+            btn.addEventListener('click', () => switchTab(btn.dataset.tab));
+        });
+
+        // --- Accessibility Toggle Logic ---
+        const accessBtn = document.getElementById('access-toggle');
+        const accessText = document.getElementById('access-text');
+        const body = document.body;
+
+        accessBtn.addEventListener('click', () => {
+            const isAccessible = body.classList.toggle('accessible-mode');
+            accessBtn.setAttribute('aria-pressed', isAccessible);
+            
+            if (isAccessible) {
+                accessText.textContent = "Disable Focus Mode";
+                accessBtn.classList.add('bg-teal-100', 'text-teal-800');
+                accessBtn.classList.remove('bg-slate-100');
+            } else {
+                accessText.textContent = "Enable Focus Mode";
+                accessBtn.classList.remove('bg-teal-100', 'text-teal-800');
+                accessBtn.classList.add('bg-slate-100');
+            }
+        });
+
+        // --- AI Simulator Logic ---
+        function updatePromptSimulation() {
+            const style = window.currentPromptStyle || 'blunt';
+            const readingLevel = document.getElementById('readingLevel').value;
+            const container = document.getElementById('bot-message');
+
+            let message = "";
+
+            if (style === 'blunt') {
+                container.className = "bg-white border border-slate-200 text-slate-800 px-4 py-3 rounded-t-lg rounded-br-lg max-w-[90%] text-sm shadow-sm";
+                message = "<strong>System Error 404:</strong> The file upload failed. The format is incorrect or the server is busy. Please try again later. Check your file extension.";
+            } else {
+                // Trauma Informed + Reading Level Logic
+                container.className = "bg-teal-50 border border-teal-200 text-teal-900 px-4 py-3 rounded-t-lg rounded-br-lg max-w-[90%] text-sm shadow-sm";
+                
+                if (readingLevel === 'complex') {
+                    message = "I apologize for the inconvenience. We encountered an issue processing your document. Please verify it is a PDF and attempt the upload again.";
+                } else {
+                    // Age 9-10 (Year 5) target
+                    message = "Don't worry, you didn't do anything wrong. <br><br>We couldn't read that file. Could you try checking if it is a <strong>PDF</strong> file?<br><br>If you are stuck, you can click 'Help' anytime.";
+                }
+            }
+            container.innerHTML = message;
+        }
+
+        function setPromptStyle(style) {
+            window.currentPromptStyle = style;
+            updatePromptSimulation();
+        }
+
+        document.getElementById('readingLevel').addEventListener('change', updatePromptSimulation);
+        
+        // Initialize AI Sim
+        setPromptStyle('trauma');
+
+
+        // --- Chart.js Implementations ---
+        let rageChart, latencyChart;
+
+        function initCharts() {
+            const rageCtx = document.getElementById('rageClickChart').getContext('2d');
+            const latencyCtx = document.getElementById('latencyChart').getContext('2d');
+
+            Chart.defaults.font.family = "'Inter', sans-serif";
+            Chart.defaults.color = '#64748b';
+
+            // Rage Click Chart (Bar)
+            rageChart = new Chart(rageCtx, {
+                type: 'bar',
+                data: {
+                    labels: ['Log In', 'Upload CV', 'Search', 'Profile', 'Settings'],
+                    datasets: [{
+                        label: 'Avg Clicks per Action (Normal)',
+                        data: [1.2, 2.1, 1.5, 1.1, 1.0],
+                        backgroundColor: '#cbd5e1',
+                        borderRadius: 4
+                    }, {
+                        label: 'Detected Rage Clicks (Threshold >3)',
+                        data: [0, 4.5, 0, 0, 0], // Spike at Upload
+                        backgroundColor: '#f87171',
+                        borderRadius: 4
+                    }]
+                },
+                options: {
+                    responsive: true,
+                    maintainAspectRatio: false,
+                    scales: {
+                        y: { beginAtZero: true, title: { display: true, text: 'Clicks' } }
+                    },
+                    plugins: {
+                        legend: { position: 'bottom' },
+                        tooltip: {
+                            callbacks: {
+                                label: function(context) {
+                                    return context.parsed.y > 3 ? '⚠️ ALERT: User Frustration Detected' : 'Normal Interaction';
+                                }
+                            }
+                        }
+                    }
+                }
+            });
+
+            // Latency Chart (Line)
+            latencyChart = new Chart(latencyCtx, {
+                type: 'line',
+                data: {
+                    labels: ['0s', '10s', '20s', '30s', '40s', '50s', '60s'],
+                    datasets: [{
+                        label: 'Healthy Interaction',
+                        data: [100, 80, 40, 10, 5, 2, 0],
+                        borderColor: '#0d9488',
+                        tension: 0.4,
+                        fill: false
+                    },
+                    {
+                        label: 'Cognitive Overload Pattern',
+                        data: [100, 95, 90, 85, 80, 75, 70], // Flat line indicates freezing
+                        borderColor: '#f59e0b',
+                        borderDash: [5, 5],
+                        tension: 0.4,
+                        fill: false
+                    }]
+                },
+                options: {
+                    responsive: true,
+                    maintainAspectRatio: false,
+                    scales: {
+                        y: { title: { display: true, text: '% Users Active' } },
+                        x: { title: { display: true, text: 'Time on Screen' } }
+                    },
+                    plugins: {
+                        legend: { position: 'bottom' }
+                    }
+                }
+            });
+        }
+
+        function updateChartData() {
+            // Simulate random variations in the rage click chart
+            const newData = [0, 2 + Math.random() * 4, 0, Math.random() * 2, 0];
+            rageChart.data.datasets[1].data = newData;
+            rageChart.update();
+        }
+
+        // Initialize charts when DOM is ready
+        document.addEventListener('DOMContentLoaded', () => {
+            initCharts();
+            // Default to dashboard
+            switchTab('dashboard');
+        });
+
+    </script>
+</body>
+</html>
